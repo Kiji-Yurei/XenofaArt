@@ -1,16 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-// Cargar galerías desde galeria.json (ruta compatible con GitHub Pages)
-function renderGallery(container, images) {
+// Cargar galerías desde galeria.json
+// Estructura esperada: { "arte": ["Arte/archivo.jpg", ...], "cosplay": ["Cosplay/archivo.jpg", ...] }
+function renderGallery(container, images, basePath) {
     if (!container || !Array.isArray(images)) return;
     container.innerHTML = '';
-    images.forEach((src, i) => {
-        const div = document.createElement('div');
+    var prefix = basePath || '';
+    images.forEach(function(src, i) {
+        var div = document.createElement('div');
         div.className = 'gallery-item gallery-item-img';
-        div.setAttribute('data-src', src);
-        div.setAttribute('data-alt', (container.dataset.galeria === 'arte' ? 'Arte ' : 'Cosplay ') + (i + 1));
-        const img = document.createElement('img');
-        img.src = src;
+        var fullSrc = prefix + src;
+        div.setAttribute('data-src', fullSrc);
+        div.setAttribute('data-alt', (container.getAttribute('data-galeria') === 'arte' ? 'Arte ' : 'Cosplay ') + (i + 1));
+        var img = document.createElement('img');
+        img.src = fullSrc;
         img.alt = div.getAttribute('data-alt');
         img.loading = 'lazy';
         div.appendChild(img);
@@ -19,12 +22,12 @@ function renderGallery(container, images) {
 }
 
 function addSparklesToGallery() {
-    document.querySelectorAll('.gallery-art .gallery-item-img, .gallery-cosplay .gallery-item-img').forEach(item => {
+    document.querySelectorAll('.gallery-art .gallery-item-img, .gallery-cosplay .gallery-item-img').forEach(function(item) {
         if (item.querySelector('.frame-sparkle')) return;
-        const sparkles = ['☆', '✧', '✦', '★'];
-        const positions = ['tl', 'tr', 'bl', 'br'];
-        positions.forEach((pos, i) => {
-            const span = document.createElement('span');
+        var sparkles = ['☆', '✧', '✦', '★'];
+        var positions = ['tl', 'tr', 'bl', 'br'];
+        positions.forEach(function(pos, i) {
+            var span = document.createElement('span');
             span.className = 'frame-sparkle frame-sparkle-' + pos;
             span.textContent = sparkles[i];
             span.setAttribute('aria-hidden', 'true');
@@ -34,20 +37,33 @@ function addSparklesToGallery() {
 }
 
 (function loadGalleries() {
-    var base = window.location.pathname.replace(/\/?$/, '/');
-    var jsonUrl = (base || '/') + 'galeria.json';
+    // Ruta base: en GitHub Pages es /XenofaArt/, en local puede ser /
+    var pathname = window.location.pathname;
+    var basePath = pathname;
+    if (pathname.match(/\.[^/]+$/)) {
+        basePath = pathname.replace(/\/[^/]+$/, '/');
+    } else if (!pathname.endsWith('/')) {
+        basePath = pathname + '/';
+    }
+    if (!basePath) basePath = '/';
+    var jsonUrl = new URL(basePath + 'galeria.json', window.location.origin).href;
+
     fetch(jsonUrl)
-        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('Fetch failed: ' + r.status)); })
         .then(function(data) {
             var artGallery = document.querySelector('[data-galeria="arte"]');
             var cosplayGallery = document.querySelector('[data-galeria="cosplay"]');
-            if (artGallery && data.arte) renderGallery(artGallery, data.arte);
-            if (cosplayGallery && data.cosplay) renderGallery(cosplayGallery, data.cosplay);
+            if (artGallery && data.arte && Array.isArray(data.arte)) {
+                renderGallery(artGallery, data.arte, basePath);
+            }
+            if (cosplayGallery && data.cosplay && Array.isArray(data.cosplay)) {
+                renderGallery(cosplayGallery, data.cosplay, basePath);
+            }
             addSparklesToGallery();
         })
-        .catch(function() {
+        .catch(function(err) {
             document.querySelectorAll('[data-galeria]').forEach(function(el) {
-                el.innerHTML = '<p class="gallery-error">No se pudo cargar la galería. Comprueba que galeria.json existe.</p>';
+                el.innerHTML = '<p class="gallery-error">No se pudo cargar la galería (' + (err && err.message ? err.message : 'error') + ').</p>';
             });
         });
 })();
