@@ -1,12 +1,12 @@
 name: Actualizar galería
 
-# Solo se ejecuta cuando cambian imágenes en Arte/ o Cosplay/
-# Así evitamos bucle infinito cuando el workflow hace commit de galeria.json
+# Se ejecuta cuando cambian imágenes en Arte/ o Cosplay/, o manualmente
 on:
   push:
     paths:
       - 'Arte/**'
       - 'Cosplay/**'
+  workflow_dispatch:  # Permite ejecutar manualmente desde la pestaña Actions
 
 jobs:
   actualizar:

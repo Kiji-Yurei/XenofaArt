@@ -1,5 +1,57 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+// Cargar galerías desde galeria.json (ruta compatible con GitHub Pages)
+function renderGallery(container, images) {
+    if (!container || !Array.isArray(images)) return;
+    container.innerHTML = '';
+    images.forEach((src, i) => {
+        const div = document.createElement('div');
+        div.className = 'gallery-item gallery-item-img';
+        div.setAttribute('data-src', src);
+        div.setAttribute('data-alt', (container.dataset.galeria === 'arte' ? 'Arte ' : 'Cosplay ') + (i + 1));
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = div.getAttribute('data-alt');
+        img.loading = 'lazy';
+        div.appendChild(img);
+        container.appendChild(div);
+    });
+}
+
+function addSparklesToGallery() {
+    document.querySelectorAll('.gallery-art .gallery-item-img, .gallery-cosplay .gallery-item-img').forEach(item => {
+        if (item.querySelector('.frame-sparkle')) return;
+        const sparkles = ['☆', '✧', '✦', '★'];
+        const positions = ['tl', 'tr', 'bl', 'br'];
+        positions.forEach((pos, i) => {
+            const span = document.createElement('span');
+            span.className = 'frame-sparkle frame-sparkle-' + pos;
+            span.textContent = sparkles[i];
+            span.setAttribute('aria-hidden', 'true');
+            item.prepend(span);
+        });
+    });
+}
+
+(function loadGalleries() {
+    var base = window.location.pathname.replace(/\/?$/, '/');
+    var jsonUrl = (base || '/') + 'galeria.json';
+    fetch(jsonUrl)
+        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function(data) {
+            var artGallery = document.querySelector('[data-galeria="arte"]');
+            var cosplayGallery = document.querySelector('[data-galeria="cosplay"]');
+            if (artGallery && data.arte) renderGallery(artGallery, data.arte);
+            if (cosplayGallery && data.cosplay) renderGallery(cosplayGallery, data.cosplay);
+            addSparklesToGallery();
+        })
+        .catch(function() {
+            document.querySelectorAll('[data-galeria]').forEach(function(el) {
+                el.innerHTML = '<p class="gallery-error">No se pudo cargar la galería. Comprueba que galeria.json existe.</p>';
+            });
+        });
+})();
+
 // Texto animado - letras que aparecen en "XenofaArt"
 const heroTitleText = document.querySelector('.hero-title-text');
 if (heroTitleText) {
