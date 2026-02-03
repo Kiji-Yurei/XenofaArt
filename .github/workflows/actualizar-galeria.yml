@@ -1,0 +1,39 @@
+name: Actualizar galería
+
+# Solo se ejecuta cuando cambian imágenes en Arte/ o Cosplay/
+# Así evitamos bucle infinito cuando el workflow hace commit de galeria.json
+on:
+  push:
+    paths:
+      - 'Arte/**'
+      - 'Cosplay/**'
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Necesario para hacer push
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generar galeria.json
+        run: node scripts/generar-galeria.js
+
+      - name: Commit y push si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet galeria.json; then
+            echo "No hay cambios en galeria.json"
+          else
+            git add galeria.json
+            git commit -m "chore: actualizar galería automáticamente [skip ci]"
+            git push
+          fi

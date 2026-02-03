@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XenofaArt | Art & Cosplay</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Elementos decorativos de fondo (parallax) -->
+    <div class="bg-decor" aria-hidden="true">
+        <span class="bg-shape-parallax" data-speed="0.3"><span class="bg-shape bg-shape-1"></span></span>
+        <span class="bg-shape-parallax" data-speed="0.5"><span class="bg-shape bg-shape-2"></span></span>
+        <span class="bg-shape-parallax" data-speed="0.2"><span class="bg-shape bg-shape-3"></span></span>
+        <span class="bg-shape-parallax" data-speed="0.4"><span class="bg-shape bg-shape-4"></span></span>
+        <span class="bg-shape-parallax" data-speed="0.6"><span class="bg-shape bg-shape-5"></span></span>
+        <span class="bg-shape-parallax" data-speed="0.25"><span class="bg-shape bg-shape-6"></span></span>
+        <span class="bg-shape-parallax" data-speed="0.45"><span class="bg-shape bg-shape-7"></span></span>
+        <span class="bg-shape-parallax" data-speed="0.15"><span class="bg-shape bg-shape-8"></span></span>
+        <!-- Elementos minimalistas que aparecen y desaparecen -->
+        <span class="bg-fade bg-fade-1"></span>
+        <span class="bg-fade bg-fade-2"></span>
+        <span class="bg-fade bg-fade-3"></span>
+        <span class="bg-fade bg-fade-4"></span>
+        <span class="bg-fade bg-fade-5"></span>
+        <span class="bg-fade bg-fade-6"></span>
+        <span class="bg-fade bg-fade-7"></span>
+        <span class="bg-fade bg-fade-8"></span>
+        <span class="bg-fade bg-fade-9"></span>
+        <span class="bg-fade bg-fade-10"></span>
+        <span class="bg-fade bg-fade-line bg-fade-11"></span>
+        <span class="bg-fade bg-fade-line bg-fade-12"></span>
+        <span class="bg-fade bg-fade-dot bg-fade-13"></span>
+        <span class="bg-fade bg-fade-dot bg-fade-14"></span>
+        <span class="bg-fade bg-fade-dot bg-fade-15"></span>
+    </div>
+    <!-- Navegación -->
+    <nav class="nav">
+        <a href="javascript:void(0)" class="nav-logo" onclick="goToPage('home')">XenofaArt</a>
+        <button class="nav-toggle" aria-label="Menú">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-menu">
+            <li><a href="javascript:void(0)" onclick="goToPage('art')">Arte</a></li>
+            <li><a href="javascript:void(0)" onclick="goToPage('cosplay')">Cosplay</a></li>
+            <li><a href="javascript:void(0)" onclick="goToPage('contacto')">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <div class="pages-viewport">
+    <!-- Página: Inicio -->
+    <main id="page-home" class="page active">
+        <header class="hero" id="hero-block">
+            <div class="hero-slider">
+                <div class="hero-slide" style="background-image: url('Arte/002371add831ae464fac07adbd6a81a5.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('Cosplay/00a61727986b612fc336d7e234fb650b.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('Arte/486c926bf7eeae4c0623551022a6e1bf.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('Cosplay/5ad187c7b18be3adcd27dbbd623756b1.jpg')"></div>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title"><span class="hero-title-text">XenofaArt</span></h1>
+                <p class="hero-subtitle">Arte · Cosplay · Comisiones</p>
+                <div class="hero-cta">
+                    <a href="javascript:void(0)" class="btn btn-hero-cta" onclick="goToPage('art')">Ver mi arte</a>
+                    <a href="javascript:void(0)" class="btn btn-hero-cta" onclick="goToPage('cosplay')">Ver cosplays</a>
+                </div>
+                <div class="hero-badge">+50 comisiones realizadas ✨</div>
+                <div class="hero-decor">
+                    <span class="dot dot-orange"></span>
+                    <span class="dot dot-magenta"></span>
+                    <span class="dot dot-yellow"></span>
+                </div>
+            </div>
+        </header>
+    </main>
+
+    <!-- Página: Arte -->
+    <main id="page-art" class="page">
+    <section id="art" class="section section-art reveal" data-reveal>
+        <div class="section-bg-fade" aria-hidden="true">
+            <span class="bg-fade bg-fade-1"></span>
+            <span class="bg-fade bg-fade-2"></span>
+            <span class="bg-fade bg-fade-3"></span>
+            <span class="bg-fade bg-fade-4"></span>
+            <span class="bg-fade bg-fade-5"></span>
+            <span class="bg-fade bg-fade-6"></span>
+            <span class="bg-fade bg-fade-7"></span>
+            <span class="bg-fade bg-fade-8"></span>
+            <span class="bg-fade bg-fade-9"></span>
+            <span class="bg-fade bg-fade-10"></span>
+            <span class="bg-fade bg-fade-line bg-fade-11"></span>
+            <span class="bg-fade bg-fade-line bg-fade-12"></span>
+            <span class="bg-fade bg-fade-dot bg-fade-13"></span>
+            <span class="bg-fade bg-fade-dot bg-fade-14"></span>
+            <span class="bg-fade bg-fade-dot bg-fade-15"></span>
+        </div>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">✦ Comisiones</span>
+                <h2>Arte & Ilustraciones</h2>
+                <p>Promoción de dibujos y comisiones personalizadas</p>
+            </div>
+            <div class="gallery gallery-art" data-gallery="art" data-galeria="arte" onclick="var i=event.target.closest('.gallery-item-img');if(i){event.preventDefault();event.stopPropagation();var g=i.closest('.gallery');var im=i.querySelector('img');var src=i.getAttribute('data-src')||(im&&im.src);if(src)openLightboxInline(src,im?im.alt:'Imagen',g);}">
+                <!-- Las imágenes se cargan dinámicamente desde galeria.json -->
+            </div>
+            <div class="btn-commission-wrap">
+                <div class="btn-commission-particles" aria-hidden="true"></div>
+                <button type="button" class="btn btn-primary btn-commission-open" onclick="openCommissionModal()">
+                    Solicitar comisión
+                </button>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Página: Cosplay -->
+    <main id="page-cosplay" class="page">
+    <section id="cosplay" class="section section-cosplay reveal" data-reveal>
+        <div class="section-bg-fade" aria-hidden="true">
+            <span class="bg-fade bg-fade-1"></span>
+            <span class="bg-fade bg-fade-2"></span>
+            <span class="bg-fade bg-fade-3"></span>
+            <span class="bg-fade bg-fade-4"></span>
+            <span class="bg-fade bg-fade-5"></span>
+            <span class="bg-fade bg-fade-6"></span>
+            <span class="bg-fade bg-fade-7"></span>
+            <span class="bg-fade bg-fade-8"></span>
+            <span class="bg-fade bg-fade-9"></span>
+            <span class="bg-fade bg-fade-10"></span>
+            <span class="bg-fade bg-fade-line bg-fade-11"></span>
+            <span class="bg-fade bg-fade-line bg-fade-12"></span>
+            <span class="bg-fade bg-fade-dot bg-fade-13"></span>
+            <span class="bg-fade bg-fade-dot bg-fade-14"></span>
+            <span class="bg-fade bg-fade-dot bg-fade-15"></span>
+        </div>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">✦ Cosplay</span>
+                <h2>Cosplay</h2>
+                <p>Promoción de cosplays y proyectos</p>
+            </div>
+            <div class="gallery gallery-cosplay" data-gallery="cosplay" data-galeria="cosplay" onclick="var i=event.target.closest('.gallery-item-img');if(i){event.preventDefault();event.stopPropagation();var g=i.closest('.gallery');var im=i.querySelector('img');var src=i.getAttribute('data-src')||(im&&im.src);if(src)openLightboxInline(src,im?im.alt:'Imagen',g);}">
+                <!-- Las imágenes se cargan dinámicamente desde galeria.json -->
+            </div>
+            <a href="javascript:void(0)" class="btn btn-secondary" onclick="goToPage('contacto')">Ver más</a>
+        </div>
+    </section>
+    </main>
+
+    <!-- Página: Contacto -->
+    <main id="page-contacto" class="page">
+    <section id="contacto" class="section section-contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">✦ Conecta</span>
+                <h2>Contacto</h2>
+                <p>¿Interesado en comisiones o colaboraciones?</p>
+            </div>
+            <div class="contact-links">
+                <a href="#" class="contact-card">
+                    <span class="contact-icon">📧</span>
+                    <span>Email</span>
+                </a>
+                <a href="#" class="contact-card">
+                    <span class="contact-icon">📱</span>
+                    <span>Instagram</span>
+                </a>
+                <a href="#" class="contact-card">
+                    <span class="contact-icon">🐦</span>
+                    <span>Twitter/X</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    </main>
+    </div><!-- .pages-viewport -->
+
+    <footer class="footer">
+        <p>© XenofaArt · Arte & Cosplay</p>
+    </footer>
+
+    <!-- Modal de comisiones -->
+    <div class="modal-overlay" id="modal-commission" aria-hidden="true">
+        <div class="modal-backdrop" onclick="closeCommissionModal()"></div>
+        <div class="modal" role="dialog" aria-labelledby="modal-commission-title">
+            <button type="button" class="modal-close" aria-label="Cerrar" onclick="closeCommissionModal()">×</button>
+            <div class="modal-content">
+                <h3 id="modal-commission-title" class="commission-title">Precios de comisiones</h3>
+                <p class="commission-note">Precios estimados por personaje. Los precios pueden variar según la complejidad.</p>
+                <div class="commission-grid">
+                    <div class="commission-item">
+                        <img src="img/line%20art.jpg" alt="Ejemplo de line art - solo líneas y contornos" class="commission-img" loading="lazy">
+                        <span class="commission-type">Line art</span>
+                        <span class="commission-desc">Solo líneas, sin color</span>
+                        <span class="commission-price">10€</span>
+                    </div>
+                    <div class="commission-item">
+                        <img src="img/coloreado%20plano.png" alt="Ejemplo de coloreado plano - colores sólidos" class="commission-img" loading="lazy">
+                        <span class="commission-type">Coloreado plano</span>
+                        <span class="commission-desc">Color base sin sombras</span>
+                        <span class="commission-price">20€</span>
+                    </div>
+                    <div class="commission-item">
+                        <img src="img/Sombras.png" alt="Ejemplo de coloreado con sombras" class="commission-img" loading="lazy">
+                        <span class="commission-type">Coloreado con sombras</span>
+                        <span class="commission-desc">Color + sombreado básico</span>
+                        <span class="commission-price">30€</span>
+                    </div>
+                    <div class="commission-item">
+                        <img src="img/fondo%20simple.png" alt="Ejemplo de ilustración completa" class="commission-img" loading="lazy">
+                        <span class="commission-type">Ilustración completa</span>
+                        <span class="commission-desc">Detallado + fondo simple</span>
+                        <span class="commission-price">45€</span>
+                    </div>
+                    <div class="commission-item">
+                        <img src="img/ilustracion%20premium.png" alt="Ejemplo de ilustración premium" class="commission-img" loading="lazy">
+                        <span class="commission-type">Ilustración premium</span>
+                        <span class="commission-desc">Máximo detalle + fondo elaborado</span>
+                        <span class="commission-price">60€</span>
+                    </div>
+                    <div class="commission-item">
+                        <img src="img/busto.png" alt="Ejemplo de bust o medio cuerpo" class="commission-img" loading="lazy">
+                        <span class="commission-type">Bust / medio cuerpo</span>
+                        <span class="commission-desc">+5€ al precio base</span>
+                        <span class="commission-price">+5€</span>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-outline btn-modal-contact" onclick="closeCommissionModal(); goToPage('contacto')">Contactar para pedir</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal lightbox para imágenes a pantalla completa -->
+    <div class="lightbox-overlay" id="lightbox" aria-hidden="true">
+        <div class="lightbox-backdrop"></div>
+        <button type="button" class="lightbox-close" aria-label="Cerrar">×</button>
+        <button type="button" class="lightbox-prev" aria-label="Anterior">‹</button>
+        <button type="button" class="lightbox-next" aria-label="Siguiente">›</button>
+        <img src="" alt="" class="lightbox-img" id="lightbox-img">
+    </div>
+
+    <script>
+function openCommissionModal() {
+    var m = document.getElementById('modal-commission');
+    if (m) { m.classList.add('is-open'); m.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+}
+function closeCommissionModal() {
+    var m = document.getElementById('modal-commission');
+    if (m) { m.classList.remove('is-open'); m.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+}
+
+function goToPage(id) {
+    var target = document.getElementById('page-' + id);
+    var currentActive = document.querySelector('.page.active');
+    var updateNav = function() {
+        document.querySelectorAll('.nav-menu a, .nav-logo').forEach(function(link) {
+            link.classList.remove('nav-active');
+            var attr = (link.getAttribute('onclick') || '');
+            if (attr.indexOf("'"+id+"'") !== -1 || attr.indexOf('"'+id+'"') !== -1) link.classList.add('nav-active');
+        });
+        document.querySelector('.nav-menu')?.classList.remove('active');
+    };
+    var applyPage = function() {
+        ['page-home','page-art','page-cosplay','page-contacto'].forEach(function(p) {
+            var el = document.getElementById(p);
+            if (el) { el.classList.remove('active'); el.classList.remove('leaving'); }
+        });
+        if (target) {
+            target.classList.add('active');
+            target.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('revealed'); });
+        }
+        updateNav();
+    };
+    if (currentActive && target && currentActive.id !== 'page-' + id) {
+        currentActive.classList.add('leaving');
+        target.classList.add('active');
+        target.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('revealed'); });
+        updateNav();
+        setTimeout(function() {
+            currentActive.classList.remove('active', 'leaving');
+            applyPage();
+        }, 550);
+    } else {
+        applyPage();
+    }
+}
+
+// Lightbox - abrir imagen a pantalla completa (inline para que funcione siempre)
+var lightboxImgs = [], lightboxIdx = 0;
+function openLightboxInline(src, alt, galleryEl) {
+    lightboxImgs = [];
+    var items = galleryEl ? galleryEl.querySelectorAll('.gallery-item-img') : document.querySelectorAll('.gallery-item-img');
+    items.forEach(function(it) {
+        var im = it.querySelector('img');
+        var s = it.getAttribute('data-src') || (im && im.src);
+        if (s) lightboxImgs.push({src:s, alt:im?im.alt:'Imagen'});
+    });
+    lightboxIdx = lightboxImgs.findIndex(function(i){return i.src===src;});
+    if (lightboxIdx < 0) lightboxIdx = 0;
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lightbox-img');
+    if (lbImg && lightboxImgs[lightboxIdx]) {
+        lbImg.src = lightboxImgs[lightboxIdx].src;
+        lbImg.alt = lightboxImgs[lightboxIdx].alt;
+    }
+    if (lb) { lb.classList.add('is-open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    document.querySelector('.lightbox-prev').disabled = lightboxIdx <= 0;
+    document.querySelector('.lightbox-next').disabled = lightboxIdx >= lightboxImgs.length - 1;
+}
+function closeLightboxInline() {
+    var lb = document.getElementById('lightbox');
+    if (lb) { lb.classList.remove('is-open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+}
+function lightboxPrevInline() {
+    if (lightboxIdx > 0) { lightboxIdx--; var lbImg=document.getElementById('lightbox-img'); if(lbImg&&lightboxImgs[lightboxIdx]){lbImg.src=lightboxImgs[lightboxIdx].src;lbImg.alt=lightboxImgs[lightboxIdx].alt;} document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
+}
+function lightboxNextInline() {
+    if (lightboxIdx < lightboxImgs.length - 1) { lightboxIdx++; var lbImg=document.getElementById('lightbox-img'); if(lbImg&&lightboxImgs[lightboxIdx]){lbImg.src=lightboxImgs[lightboxIdx].src;lbImg.alt=lightboxImgs[lightboxIdx].alt;} document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function(e) {
+        var item = e.target.closest('.gallery-item-img');
+        if (item) {
+            e.preventDefault();
+            e.stopPropagation();
+            var g = item.closest('.gallery');
+            var im = item.querySelector('img');
+            var src = item.getAttribute('data-src') || (im && im.src);
+            if (src) openLightboxInline(src, im?im.alt:'Imagen', g);
+        }
+    });
+    document.querySelector('.lightbox-close').onclick = closeLightboxInline;
+    document.querySelector('.lightbox-backdrop').onclick = closeLightboxInline;
+    document.querySelector('.lightbox-prev').onclick = lightboxPrevInline;
+    document.querySelector('.lightbox-next').onclick = lightboxNextInline;
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('is-open')) closeLightboxInline();
+        if (e.key === 'ArrowLeft' && document.getElementById('lightbox').classList.contains('is-open')) lightboxPrevInline();
+        if (e.key === 'ArrowRight' && document.getElementById('lightbox').classList.contains('is-open')) lightboxNextInline();
+    });
+});
+</script>
+<script src="script.js"></script>
+</body>
+</html>
