@@ -72,12 +72,6 @@ function initPopupPelucas(pelucasItems, basePath) {
             updatePopupSlider();
         }
     }, 4000);
-    if (!sessionStorage.getItem('popup-pelucas-visto')) {
-        setTimeout(function() {
-            if (typeof openPopupPelucas === 'function') openPopupPelucas();
-            sessionStorage.setItem('popup-pelucas-visto', '1');
-        }, 2500);
-    }
 }
 
 (function loadGalleries() {
@@ -211,6 +205,12 @@ function showPage(pageId) {
         requestAnimationFrame(() => {
             pages[pageId]?.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'));
         });
+        if (pageId === 'cosplay' && !sessionStorage.getItem('popup-pelucas-visto')) {
+            setTimeout(() => {
+                if (typeof openPopupPelucas === 'function') openPopupPelucas();
+                sessionStorage.setItem('popup-pelucas-visto', '1');
+            }, 1500);
+        }
     };
 
     if (currentActive && currentActive !== pageId) {

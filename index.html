@@ -48,7 +48,6 @@
         <ul class="nav-menu">
             <li><a href="javascript:void(0)" onclick="goToPage('art')">Arte</a></li>
             <li><a href="javascript:void(0)" onclick="goToPage('cosplay')">Cosplay</a></li>
-            <li><a href="javascript:void(0)" onclick="goToPage('pelucas')">Pelucas</a></li>
             <li><a href="javascript:void(0)" onclick="goToPage('contacto')">Contacto</a></li>
         </ul>
     </nav>
@@ -288,21 +287,20 @@
         <button type="button" class="lightbox-next" aria-label="Siguiente">›</button>
     </div>
 
-    <!-- Popup anuncio estilizado de pelucas -->
-    <div class="popup-pelucas-overlay" id="popup-pelucas" aria-hidden="true">
-        <div class="popup-pelucas-backdrop" onclick="closePopupPelucas()"></div>
-        <div class="popup-pelucas">
-            <button type="button" class="popup-pelucas-close" aria-label="Cerrar" onclick="closePopupPelucas()">×</button>
+    <!-- Popup anuncio estilizado de pelucas - esquina, solo en Cosplay -->
+    <div class="popup-pelucas-corner" id="popup-pelucas" aria-hidden="true">
+        <div class="popup-pelucas" onclick="closePopupPelucas(); goToPage('pelucas')" role="button" tabindex="0">
+            <button type="button" class="popup-pelucas-close" aria-label="Cerrar" onclick="event.stopPropagation(); closePopupPelucas()">×</button>
             <div class="popup-pelucas-content">
                 <p class="popup-pelucas-msg">¿Quieres que tu peluca quede así? También contamos con servicios de estilizados de pelucas.</p>
                 <div class="popup-pelucas-slider">
                     <div class="popup-pelucas-slider-track">
                         <!-- Las fotos se cargan dinámicamente desde galeria.json pelucas -->
                     </div>
-                    <button type="button" class="popup-pelucas-prev" aria-label="Anterior">‹</button>
-                    <button type="button" class="popup-pelucas-next" aria-label="Siguiente">›</button>
+                    <button type="button" class="popup-pelucas-prev" aria-label="Anterior" onclick="event.stopPropagation()">‹</button>
+                    <button type="button" class="popup-pelucas-next" aria-label="Siguiente" onclick="event.stopPropagation()">›</button>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="closePopupPelucas(); goToPage('pelucas')">Ver pelucas</button>
+                <span class="popup-pelucas-cta">Ver pelucas →</span>
             </div>
         </div>
     </div>
@@ -329,13 +327,16 @@ function goToPage(id) {
         document.querySelector('.nav-menu')?.classList.remove('active');
     };
     var applyPage = function() {
-        ['page-home','page-art','page-cosplay','page-contacto'].forEach(function(p) {
+        ['page-home','page-art','page-cosplay','page-pelucas','page-contacto'].forEach(function(p) {
             var el = document.getElementById(p);
             if (el) { el.classList.remove('active'); el.classList.remove('leaving'); }
         });
         if (target) {
             target.classList.add('active');
             target.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('revealed'); });
+            if (id === 'cosplay' && !sessionStorage.getItem('popup-pelucas-visto')) {
+                setTimeout(function() { if (typeof openPopupPelucas === 'function') openPopupPelucas(); sessionStorage.setItem('popup-pelucas-visto', '1'); }, 1500);
+            }
         }
         updateNav();
     };
@@ -386,11 +387,11 @@ function closeLightboxInline() {
 }
 function openPopupPelucas() {
     var p = document.getElementById('popup-pelucas');
-    if (p) { p.classList.add('is-open'); p.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    if (p) { p.classList.add('is-open'); p.setAttribute('aria-hidden','false'); }
 }
 function closePopupPelucas() {
     var p = document.getElementById('popup-pelucas');
-    if (p) { p.classList.remove('is-open'); p.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    if (p) { p.classList.remove('is-open'); p.setAttribute('aria-hidden','true'); }
 }
 function lightboxPrevInline() {
     if (lightboxIdx > 0) { lightboxIdx--; updateLightboxContent(); document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
