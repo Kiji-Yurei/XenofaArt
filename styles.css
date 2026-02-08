@@ -660,9 +660,49 @@ body::before {
     border: 2px solid var(--magenta);
 }
 
-.section-pelucas .frame-sparkle-pelucas {
-    font-size: 0.75rem;
+.section-pelucas .gallery-item-img {
+    overflow: visible;
 }
+
+.section-pelucas .gallery-item-img::before {
+    content: '✂';
+    display: block !important;
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    color: var(--yellow);
+    text-shadow: 0 0 8px var(--yellow), 0 0 15px var(--magenta);
+    z-index: 3;
+    animation: sparkle-glow 2s ease-in-out infinite;
+}
+
+.section-pelucas .gallery-item-img::after {
+    content: '✁';
+    display: block !important;
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    font-size: 0.75rem;
+    color: var(--magenta);
+    text-shadow: 0 0 6px var(--magenta), 0 0 12px var(--yellow);
+    z-index: 3;
+    animation: sparkle-glow 2s ease-in-out infinite 0.5s;
+    pointer-events: none;
+}
+
+.section-pelucas .frame-sparkle-pelucas {
+    font-size: 1rem;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", sans-serif;
+    color: var(--yellow);
+    text-shadow: 0 0 6px var(--yellow), 0 0 8px var(--magenta);
+}
+
+.section-pelucas .frame-sparkle-tl { color: var(--yellow); text-shadow: 0 0 6px var(--yellow); }
+.section-pelucas .frame-sparkle-tr { color: var(--magenta); text-shadow: 0 0 6px var(--magenta); }
+.section-pelucas .frame-sparkle-bl { color: var(--orange); text-shadow: 0 0 6px var(--orange); }
+.section-pelucas .frame-sparkle-br { color: var(--yellow); text-shadow: 0 0 6px var(--yellow); }
 
 .container {
     max-width: 1200px;
