@@ -6,6 +6,7 @@ on:
     paths:
       - 'Arte/**'
       - 'Cosplay/**'
+      - 'Pelucas/**'
   workflow_dispatch:  # Permite ejecutar manualmente desde la pestaña Actions
 
 jobs:

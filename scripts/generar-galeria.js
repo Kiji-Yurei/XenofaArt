@@ -9,7 +9,8 @@ const { execSync } = require('child_process');
 
 const DIRS = [
   { folder: 'Arte', key: 'arte' },
-  { folder: 'Cosplay', key: 'cosplay' }
+  { folder: 'Cosplay', key: 'cosplay' },
+  { folder: 'Pelucas', key: 'pelucas' }
 ];
 const EXT = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 

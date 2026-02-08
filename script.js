@@ -40,6 +40,46 @@ function addSparklesToGallery() {
     });
 }
 
+function initPopupPelucas(pelucasItems, basePath) {
+    var track = document.querySelector('.popup-pelucas-slider-track');
+    if (!track || !pelucasItems || pelucasItems.length === 0) return;
+    track.innerHTML = '';
+    var prefix = basePath || '';
+    pelucasItems.forEach(function(item) {
+        var src = (typeof item === 'string' ? item : (item.src || item));
+        var fullSrc = prefix + src;
+        var div = document.createElement('div');
+        div.className = 'popup-pelucas-slider-slide';
+        div.style.backgroundImage = "url('" + fullSrc + "')";
+        track.appendChild(div);
+    });
+    var popupIdx = 0;
+    var total = pelucasItems.length;
+    function updatePopupSlider() {
+        track.style.transform = 'translateX(-' + (popupIdx * 100) + '%)';
+    }
+    document.querySelector('.popup-pelucas-prev')?.addEventListener('click', function() {
+        popupIdx = (popupIdx - 1 + total) % total;
+        updatePopupSlider();
+    });
+    document.querySelector('.popup-pelucas-next')?.addEventListener('click', function() {
+        popupIdx = (popupIdx + 1) % total;
+        updatePopupSlider();
+    });
+    setInterval(function() {
+        if (document.getElementById('popup-pelucas')?.classList.contains('is-open')) {
+            popupIdx = (popupIdx + 1) % total;
+            updatePopupSlider();
+        }
+    }, 4000);
+    if (!sessionStorage.getItem('popup-pelucas-visto')) {
+        setTimeout(function() {
+            if (typeof openPopupPelucas === 'function') openPopupPelucas();
+            sessionStorage.setItem('popup-pelucas-visto', '1');
+        }, 2500);
+    }
+}
+
 (function loadGalleries() {
     // Ruta base: en GitHub Pages es /XenofaArt/, en local puede ser /
     var pathname = window.location.pathname;
@@ -57,13 +97,18 @@ function addSparklesToGallery() {
         .then(function(data) {
             var artGallery = document.querySelector('[data-galeria="arte"]');
             var cosplayGallery = document.querySelector('[data-galeria="cosplay"]');
+            var pelucasGallery = document.querySelector('[data-galeria="pelucas"]');
             if (artGallery && data.arte && Array.isArray(data.arte)) {
                 renderGallery(artGallery, data.arte, basePath);
             }
             if (cosplayGallery && data.cosplay && Array.isArray(data.cosplay)) {
                 renderGallery(cosplayGallery, data.cosplay, basePath);
             }
+            if (pelucasGallery && data.pelucas && Array.isArray(data.pelucas)) {
+                renderGallery(pelucasGallery, data.pelucas, basePath);
+            }
             addSparklesToGallery();
+            if (data.pelucas && Array.isArray(data.pelucas)) initPopupPelucas(data.pelucas, basePath);
         })
         .catch(function(err) {
             document.querySelectorAll('[data-galeria]').forEach(function(el) {
@@ -147,6 +192,7 @@ const pages = {
     home: document.getElementById('page-home'),
     art: document.getElementById('page-art'),
     cosplay: document.getElementById('page-cosplay'),
+    pelucas: document.getElementById('page-pelucas'),
     contacto: document.getElementById('page-contacto')
 };
 
@@ -258,6 +304,11 @@ const lightboxNext = lightbox?.querySelector('.lightbox-next');
 let lightboxImages = [];
 let lightboxIndex = 0;
 
+window.syncLightboxFromInline = function(imgs, idx) {
+    lightboxImages = imgs || [];
+    lightboxIndex = idx >= 0 ? idx : 0;
+};
+
 function buildLightboxImages(galleryEl) {
     lightboxImages = [];
     const items = galleryEl ? galleryEl.querySelectorAll('.gallery-item-img') : document.querySelectorAll('.gallery-item-img');
@@ -265,7 +316,8 @@ function buildLightboxImages(galleryEl) {
         const img = item.querySelector('img');
         const src = item.dataset.src || img?.src;
         const alt = img?.alt || 'Imagen';
-        if (src) lightboxImages.push({ src, alt });
+        const desc = item.dataset.desc || '';
+        if (src) lightboxImages.push({ src, alt, desc });
     });
 }
 
@@ -283,10 +335,13 @@ function openLightbox(src, alt, galleryEl) {
 }
 
 function updateLightboxImage() {
-    if (lightboxImg && lightboxImages[lightboxIndex]) {
-        lightboxImg.src = lightboxImages[lightboxIndex].src;
-        lightboxImg.alt = lightboxImages[lightboxIndex].alt;
+    const item = lightboxImages[lightboxIndex];
+    if (lightboxImg && item) {
+        lightboxImg.src = item.src;
+        lightboxImg.alt = item.alt || 'Imagen';
     }
+    const lbDesc = document.getElementById('lightbox-desc');
+    if (lbDesc) lbDesc.textContent = (item && item.desc) ? item.desc : 'Sin descripción';
 }
 
 function updateLightboxArrows() {
