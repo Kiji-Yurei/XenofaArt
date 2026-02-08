@@ -1704,16 +1704,60 @@ body::before {
     font-size: 0.9rem;
 }
 
-/* Popup anuncio pelucas - esquina, no tapa el contenido */
+/* Popup anuncio pelucas - esquina superior izquierda, solo visible en Cosplay */
+.popup-pelucas-wrapper {
+    position: fixed;
+    top: 4.5rem;
+    left: 0;
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.popup-pelucas-wrapper.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.popup-pelucas-tab {
+    position: fixed;
+    top: 4.5rem;
+    left: 0;
+    z-index: 99998;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    color: var(--lilac-dark);
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(159, 122, 234, 0.3);
+    transition: background 0.2s;
+}
+
+.popup-pelucas-tab:hover {
+    background: var(--lilac);
+    color: var(--white);
+}
+
+.popup-pelucas-tab.is-hidden {
+    display: none;
+}
+
 .popup-pelucas-corner {
     position: fixed;
-    bottom: 1rem;
-    right: 1rem;
+    top: 4.5rem;
+    left: 1rem;
     z-index: 99998;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .popup-pelucas-corner.is-open {
@@ -1837,9 +1881,9 @@ body::before {
 }
 
 @media (max-width: 480px) {
-    .popup-pelucas-corner {
-        bottom: 0.75rem;
-        right: 0.75rem;
+    .popup-pelucas-wrapper,
+    .popup-pelucas-tab {
+        top: 4rem;
     }
     .popup-pelucas {
         width: 220px;

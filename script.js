@@ -205,11 +205,13 @@ function showPage(pageId) {
         requestAnimationFrame(() => {
             pages[pageId]?.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'));
         });
-        if (pageId === 'cosplay' && !sessionStorage.getItem('popup-pelucas-visto')) {
-            setTimeout(() => {
-                if (typeof openPopupPelucas === 'function') openPopupPelucas();
-                sessionStorage.setItem('popup-pelucas-visto', '1');
-            }, 1500);
+        if (pageId === 'cosplay') {
+            const w = document.getElementById('popup-pelucas-wrapper');
+            if (w) { w.classList.add('is-visible'); w.setAttribute('aria-hidden', 'false'); }
+            setTimeout(() => { if (typeof openPopupPelucas === 'function') openPopupPelucas(); }, 500);
+        } else {
+            const w = document.getElementById('popup-pelucas-wrapper');
+            if (w) { w.classList.remove('is-visible'); w.setAttribute('aria-hidden', 'true'); }
         }
     };
 

@@ -68,7 +68,6 @@
                 <div class="hero-cta">
                     <a href="javascript:void(0)" class="btn btn-hero-cta" onclick="goToPage('art')">Ver mi arte</a>
                     <a href="javascript:void(0)" class="btn btn-hero-cta" onclick="goToPage('cosplay')">Ver cosplays</a>
-                    <a href="javascript:void(0)" class="btn btn-hero-cta" onclick="goToPage('pelucas')">Estilizado de pelucas</a>
                 </div>
                 <div class="hero-badge">+50 comisiones realizadas ✨</div>
                 <div class="hero-decor">
@@ -287,20 +286,23 @@
         <button type="button" class="lightbox-next" aria-label="Siguiente">›</button>
     </div>
 
-    <!-- Popup anuncio estilizado de pelucas - esquina, solo en Cosplay -->
-    <div class="popup-pelucas-corner" id="popup-pelucas" aria-hidden="true">
-        <div class="popup-pelucas" onclick="closePopupPelucas(); goToPage('pelucas')" role="button" tabindex="0">
-            <button type="button" class="popup-pelucas-close" aria-label="Cerrar" onclick="event.stopPropagation(); closePopupPelucas()">×</button>
-            <div class="popup-pelucas-content">
-                <p class="popup-pelucas-msg">¿Quieres que tu peluca quede así? También contamos con servicios de estilizados de pelucas.</p>
-                <div class="popup-pelucas-slider">
-                    <div class="popup-pelucas-slider-track">
-                        <!-- Las fotos se cargan dinámicamente desde galeria.json pelucas -->
+    <!-- Popup anuncio pelucas - esquina superior izquierda, sticky, solo visible en Cosplay -->
+    <div class="popup-pelucas-wrapper" id="popup-pelucas-wrapper" aria-hidden="true">
+        <div class="popup-pelucas-tab" id="popup-pelucas-tab" onclick="openPopupPelucas()">Pelucas</div>
+        <div class="popup-pelucas-corner" id="popup-pelucas" aria-hidden="true">
+            <div class="popup-pelucas" onclick="closePopupPelucas(); goToPage('pelucas')" role="button" tabindex="0">
+                <button type="button" class="popup-pelucas-close" aria-label="Cerrar" onclick="event.stopPropagation(); closePopupPelucas()">×</button>
+                <div class="popup-pelucas-content">
+                    <p class="popup-pelucas-msg">¿Quieres que tu peluca quede así? También contamos con servicios de estilizados de pelucas.</p>
+                    <div class="popup-pelucas-slider">
+                        <div class="popup-pelucas-slider-track">
+                            <!-- Las fotos se cargan dinámicamente desde galeria.json pelucas -->
+                        </div>
+                        <button type="button" class="popup-pelucas-prev" aria-label="Anterior" onclick="event.stopPropagation()">‹</button>
+                        <button type="button" class="popup-pelucas-next" aria-label="Siguiente" onclick="event.stopPropagation()">›</button>
                     </div>
-                    <button type="button" class="popup-pelucas-prev" aria-label="Anterior" onclick="event.stopPropagation()">‹</button>
-                    <button type="button" class="popup-pelucas-next" aria-label="Siguiente" onclick="event.stopPropagation()">›</button>
+                    <span class="popup-pelucas-cta">Ver pelucas →</span>
                 </div>
-                <span class="popup-pelucas-cta">Ver pelucas →</span>
             </div>
         </div>
     </div>
@@ -334,8 +336,15 @@ function goToPage(id) {
         if (target) {
             target.classList.add('active');
             target.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('revealed'); });
-            if (id === 'cosplay' && !sessionStorage.getItem('popup-pelucas-visto')) {
-                setTimeout(function() { if (typeof openPopupPelucas === 'function') openPopupPelucas(); sessionStorage.setItem('popup-pelucas-visto', '1'); }, 1500);
+            if (id === 'cosplay') {
+                var w = document.getElementById('popup-pelucas-wrapper');
+                if (w) { w.classList.add('is-visible'); w.setAttribute('aria-hidden','false'); }
+                var t = document.getElementById('popup-pelucas-tab');
+                if (t) t.classList.add('is-hidden');
+                setTimeout(function() { if (typeof openPopupPelucas === 'function') openPopupPelucas(); }, 500);
+            } else {
+                var w = document.getElementById('popup-pelucas-wrapper');
+                if (w) { w.classList.remove('is-visible'); w.setAttribute('aria-hidden','true'); }
             }
         }
         updateNav();
@@ -387,11 +396,15 @@ function closeLightboxInline() {
 }
 function openPopupPelucas() {
     var p = document.getElementById('popup-pelucas');
+    var t = document.getElementById('popup-pelucas-tab');
     if (p) { p.classList.add('is-open'); p.setAttribute('aria-hidden','false'); }
+    if (t) { t.classList.add('is-hidden'); }
 }
 function closePopupPelucas() {
     var p = document.getElementById('popup-pelucas');
+    var t = document.getElementById('popup-pelucas-tab');
     if (p) { p.classList.remove('is-open'); p.setAttribute('aria-hidden','true'); }
+    if (t) { t.classList.remove('is-hidden'); }
 }
 function lightboxPrevInline() {
     if (lightboxIdx > 0) { lightboxIdx--; updateLightboxContent(); document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
