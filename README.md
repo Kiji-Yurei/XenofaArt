@@ -11,6 +11,6 @@ Sitio web de portfolio para Arte y Cosplay.
    - Arrastra tu imagen (jpg, jpeg, png, gif o webp)
    - Haz commit
 
-2. **Automático:** Un GitHub Action escaneará las carpetas y actualizará `galeria.json`. La web mostrará la nueva foto en unos segundos.
+2. **Automático:** Un GitHub Action escaneará las carpetas y actualizará `galeria.json`. El **mensaje del commit** que escribas al subir se usará como descripción de la foto en el lightbox.
 
-No hace falta editar código ni el archivo `galeria.json` manualmente.
+3. **Descripciones manuales:** Puedes editar `galeria.json` y añadir texto en el campo `"desc"` de cada imagen. Si dejas `"desc": ""` vacío, al subir una foto nueva el comentario del commit será la descripción.

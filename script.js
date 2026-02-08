@@ -1,17 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 // Cargar galerías desde galeria.json
-// Estructura esperada: { "arte": ["Arte/archivo.jpg", ...], "cosplay": ["Cosplay/archivo.jpg", ...] }
+// Estructura: { "arte": [{"src":"Arte/x.jpg","desc":""}, ...] } o formato legacy {"arte":["Arte/x.jpg"], ...}
 function renderGallery(container, images, basePath) {
     if (!container || !Array.isArray(images)) return;
     container.innerHTML = '';
     var prefix = basePath || '';
-    images.forEach(function(src, i) {
+    var galeria = container.getAttribute('data-galeria') || 'arte';
+    images.forEach(function(item, i) {
+        var src = typeof item === 'string' ? item : (item.src || item);
+        var desc = typeof item === 'object' && item.desc ? item.desc : '';
         var div = document.createElement('div');
         div.className = 'gallery-item gallery-item-img';
         var fullSrc = prefix + src;
         div.setAttribute('data-src', fullSrc);
-        div.setAttribute('data-alt', (container.getAttribute('data-galeria') === 'arte' ? 'Arte ' : 'Cosplay ') + (i + 1));
+        div.setAttribute('data-desc', desc);
+        div.setAttribute('data-alt', (galeria === 'arte' ? 'Arte ' : 'Cosplay ') + (i + 1));
         var img = document.createElement('img');
         img.src = fullSrc;
         img.alt = div.getAttribute('data-alt');

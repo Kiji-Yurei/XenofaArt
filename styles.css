@@ -1249,6 +1249,70 @@ body::before {
     background: rgba(255, 255, 255, 0.35);
 }
 
+/* Lightbox estilo post IG - imagen + descripción al lado */
+.lightbox-post {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-img-wrap {
+    flex: 1 1 60%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.lightbox-img {
+    max-width: 100%;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.lightbox-sidebar {
+    flex: 0 0 280px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    color: var(--text-dark);
+}
+
+.lightbox-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+    .lightbox-post {
+        flex-direction: column;
+        max-height: 85vh;
+    }
+    .lightbox-img-wrap {
+        flex: 1 1 auto;
+        max-height: 60vh;
+    }
+    .lightbox-sidebar {
+        flex: 0 0 auto;
+        max-height: 25vh;
+        overflow-y: auto;
+    }
+}
+
 /* Flechas lightbox - siguiente/anterior */
 .lightbox-prev,
 .lightbox-next {
@@ -1289,18 +1353,6 @@ body::before {
 .lightbox-next:disabled {
     opacity: 0.3;
     cursor: not-allowed;
-}
-
-.lightbox-img {
-    position: relative;
-    z-index: 1;
-    max-width: 95vw;
-    max-height: 90vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
 }
 
 .gallery-item-img {

@@ -235,13 +235,20 @@
         </div>
     </div>
 
-    <!-- Modal lightbox para imágenes a pantalla completa -->
+    <!-- Modal lightbox estilo post IG: imagen + descripción -->
     <div class="lightbox-overlay" id="lightbox" aria-hidden="true">
         <div class="lightbox-backdrop"></div>
         <button type="button" class="lightbox-close" aria-label="Cerrar">×</button>
+        <div class="lightbox-post">
+            <div class="lightbox-img-wrap">
+                <img src="" alt="" class="lightbox-img" id="lightbox-img">
+            </div>
+            <div class="lightbox-sidebar">
+                <p class="lightbox-desc" id="lightbox-desc"></p>
+            </div>
+        </div>
         <button type="button" class="lightbox-prev" aria-label="Anterior">‹</button>
         <button type="button" class="lightbox-next" aria-label="Siguiente">›</button>
-        <img src="" alt="" class="lightbox-img" id="lightbox-img">
     </div>
 
     <script>
@@ -290,24 +297,28 @@ function goToPage(id) {
     }
 }
 
-// Lightbox - abrir imagen a pantalla completa (inline para que funcione siempre)
+// Lightbox estilo post IG - imagen + descripción
 var lightboxImgs = [], lightboxIdx = 0;
+function updateLightboxContent() {
+    var item = lightboxImgs[lightboxIdx];
+    var lbImg = document.getElementById('lightbox-img');
+    var lbDesc = document.getElementById('lightbox-desc');
+    if (lbImg && item) { lbImg.src = item.src; lbImg.alt = item.alt || 'Imagen'; }
+    if (lbDesc) lbDesc.textContent = item && item.desc ? item.desc : '';
+}
 function openLightboxInline(src, alt, galleryEl) {
     lightboxImgs = [];
     var items = galleryEl ? galleryEl.querySelectorAll('.gallery-item-img') : document.querySelectorAll('.gallery-item-img');
     items.forEach(function(it) {
         var im = it.querySelector('img');
         var s = it.getAttribute('data-src') || (im && im.src);
-        if (s) lightboxImgs.push({src:s, alt:im?im.alt:'Imagen'});
+        var d = it.getAttribute('data-desc') || '';
+        if (s) lightboxImgs.push({src:s, alt:im?im.alt:'Imagen', desc:d});
     });
     lightboxIdx = lightboxImgs.findIndex(function(i){return i.src===src;});
     if (lightboxIdx < 0) lightboxIdx = 0;
+    updateLightboxContent();
     var lb = document.getElementById('lightbox');
-    var lbImg = document.getElementById('lightbox-img');
-    if (lbImg && lightboxImgs[lightboxIdx]) {
-        lbImg.src = lightboxImgs[lightboxIdx].src;
-        lbImg.alt = lightboxImgs[lightboxIdx].alt;
-    }
     if (lb) { lb.classList.add('is-open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
     document.querySelector('.lightbox-prev').disabled = lightboxIdx <= 0;
     document.querySelector('.lightbox-next').disabled = lightboxIdx >= lightboxImgs.length - 1;
@@ -317,10 +328,10 @@ function closeLightboxInline() {
     if (lb) { lb.classList.remove('is-open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
 }
 function lightboxPrevInline() {
-    if (lightboxIdx > 0) { lightboxIdx--; var lbImg=document.getElementById('lightbox-img'); if(lbImg&&lightboxImgs[lightboxIdx]){lbImg.src=lightboxImgs[lightboxIdx].src;lbImg.alt=lightboxImgs[lightboxIdx].alt;} document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
+    if (lightboxIdx > 0) { lightboxIdx--; updateLightboxContent(); document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
 }
 function lightboxNextInline() {
-    if (lightboxIdx < lightboxImgs.length - 1) { lightboxIdx++; var lbImg=document.getElementById('lightbox-img'); if(lbImg&&lightboxImgs[lightboxIdx]){lbImg.src=lightboxImgs[lightboxIdx].src;lbImg.alt=lightboxImgs[lightboxIdx].alt;} document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
+    if (lightboxIdx < lightboxImgs.length - 1) { lightboxIdx++; updateLightboxContent(); document.querySelector('.lightbox-prev').disabled=lightboxIdx<=0; document.querySelector('.lightbox-next').disabled=lightboxIdx>=lightboxImgs.length-1; }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
