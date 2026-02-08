@@ -37,6 +37,18 @@ function addSparklesToGallery() {
             item.prepend(span);
         });
     });
+    document.querySelectorAll('.gallery-pelucas .gallery-item-img').forEach(function(item) {
+        if (item.querySelector('.frame-sparkle')) return;
+        var pelucasEmojis = ['✂️', '🪮', '💇', '🌬️'];
+        var positions = ['tl', 'tr', 'bl', 'br'];
+        positions.forEach(function(pos, i) {
+            var span = document.createElement('span');
+            span.className = 'frame-sparkle frame-sparkle-' + pos + ' frame-sparkle-pelucas';
+            span.textContent = pelucasEmojis[i];
+            span.setAttribute('aria-hidden', 'true');
+            item.prepend(span);
+        });
+    });
 }
 
 function initPopupPelucas(pelucasItems, basePath) {

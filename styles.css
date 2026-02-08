@@ -660,6 +660,10 @@ body::before {
     border: 2px solid var(--magenta);
 }
 
+.section-pelucas .frame-sparkle-pelucas {
+    font-size: 0.75rem;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
