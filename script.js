@@ -5,17 +5,16 @@ document.addEventListener('DOMContentLoaded', function() {
 function renderGallery(container, images, basePath) {
     if (!container || !Array.isArray(images)) return;
     container.innerHTML = '';
-    var prefix = basePath || '';
     var galeria = container.getAttribute('data-galeria') || 'arte';
     images.forEach(function(item, i) {
         var src = typeof item === 'string' ? item : (item.src || item);
         var desc = typeof item === 'object' && item.desc ? item.desc : '';
         var div = document.createElement('div');
         div.className = 'gallery-item gallery-item-img';
-        var fullSrc = prefix + src;
+        var fullSrc = new URL(src, window.location.origin + basePath).href;
         div.setAttribute('data-src', fullSrc);
         div.setAttribute('data-desc', desc);
-        div.setAttribute('data-alt', (galeria === 'arte' ? 'Arte ' : 'Cosplay ') + (i + 1));
+        div.setAttribute('data-alt', (galeria === 'arte' ? 'Arte ' : galeria === 'pelucas' ? 'Peluca ' : 'Cosplay ') + (i + 1));
         var img = document.createElement('img');
         img.src = fullSrc;
         img.alt = div.getAttribute('data-alt');
@@ -44,10 +43,9 @@ function initPopupPelucas(pelucasItems, basePath) {
     var track = document.querySelector('.popup-pelucas-slider-track');
     if (!track || !pelucasItems || pelucasItems.length === 0) return;
     track.innerHTML = '';
-    var prefix = basePath || '';
     pelucasItems.forEach(function(item) {
         var src = (typeof item === 'string' ? item : (item.src || item));
-        var fullSrc = prefix + src;
+        var fullSrc = new URL(src, window.location.origin + (basePath || '/')).href;
         var div = document.createElement('div');
         div.className = 'popup-pelucas-slider-slide';
         div.style.backgroundImage = "url('" + fullSrc + "')";
@@ -86,7 +84,7 @@ function initPopupPelucas(pelucasItems, basePath) {
     if (!basePath) basePath = '/';
     var jsonUrl = new URL(basePath + 'galeria.json', window.location.origin).href;
 
-    fetch(jsonUrl)
+    fetch(jsonUrl, { cache: 'no-store' })
         .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('Fetch failed: ' + r.status)); })
         .then(function(data) {
             var artGallery = document.querySelector('[data-galeria="arte"]');
