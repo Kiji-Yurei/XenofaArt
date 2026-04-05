@@ -857,6 +857,20 @@ body::before {
         0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
+/* Arte: miniaturas mismo tamaño en px + revelado conjunto → menos desfase visual */
+.gallery-art.gallery-art-pending-reveal .gallery-item-img img {
+    opacity: 0;
+}
+
+.gallery-art.gallery-art-reveal-ready .gallery-item-img img {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+.section-art .gallery-art .gallery-item {
+    animation-delay: 0s !important;
+}
+
 /* Brillitos en esquinas - sección arte (tonos dorados) */
 .section-art .frame-sparkle-tl {
     color: var(--yellow);

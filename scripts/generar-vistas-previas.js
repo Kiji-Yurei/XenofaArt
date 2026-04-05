@@ -3,6 +3,7 @@
  * para la cuadrícula y el popup; el lightbox sigue usando el archivo original.
  *
  * Uso: npm run vistas-previas
+ * Tras cambiar recetas de compresión: npm run vistas-previas -- --force
  */
 const fs = require('fs');
 const path = require('path');
@@ -11,8 +12,20 @@ const sharp = require('sharp');
 const ROOT = path.join(__dirname, '..');
 const FOLDERS = ['Arte', 'Cosplay', 'Pelucas'];
 const EXT = /\.(jpe?g|png|gif|webp)$/i;
-const MAX_WIDTH = 960;
-const WEBP_QUALITY = 78;
+
+/** Arte: mismo tamaño y recorte → pesos y tiempos de descarga más parejos */
+const PREVIEW_BY_FOLDER = {
+  Arte: {
+    resize: { width: 720, height: 720, fit: 'cover', position: 'centre' },
+    webp: { quality: 76, effort: 4 },
+  },
+  default: {
+    resize: { width: 960, withoutEnlargement: true },
+    webp: { quality: 78, effort: 4 },
+  },
+};
+
+const forceRegenerate = process.argv.includes('--force');
 
 async function processFile(folder, file) {
   const srcPath = path.join(ROOT, folder, file);
@@ -26,16 +39,28 @@ async function processFile(folder, file) {
   const outPath = path.join(previewDir, `${base}.webp`);
 
   const inStat = stat;
-  if (fs.existsSync(outPath)) {
+  if (!forceRegenerate && fs.existsSync(outPath)) {
     const outStat = fs.statSync(outPath);
     if (outStat.mtimeMs >= inStat.mtimeMs) return;
   }
 
-  await sharp(srcPath)
-    .rotate()
-    .resize({ width: MAX_WIDTH, withoutEnlargement: true })
-    .webp({ quality: WEBP_QUALITY, effort: 4 })
-    .toFile(outPath);
+  const opts = PREVIEW_BY_FOLDER[folder] || PREVIEW_BY_FOLDER.default;
+  let pipeline = sharp(srcPath).rotate();
+
+  const r = opts.resize;
+  if (r.height != null && r.fit) {
+    pipeline = pipeline.resize(r.width, r.height, {
+      fit: r.fit,
+      position: r.position || 'centre',
+    });
+  } else {
+    pipeline = pipeline.resize({
+      width: r.width,
+      withoutEnlargement: r.withoutEnlargement !== false,
+    });
+  }
+
+  await pipeline.webp(opts.webp).toFile(outPath);
 
   console.log('OK', path.relative(ROOT, outPath));
 }

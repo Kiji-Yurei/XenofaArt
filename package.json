@@ -4,7 +4,8 @@
   "description": "Scripts locales y CI para galería y vistas previas",
   "scripts": {
     "galeria": "node scripts/generar-galeria.js",
-    "vistas-previas": "node scripts/generar-vistas-previas.js"
+    "vistas-previas": "node scripts/generar-vistas-previas.js",
+    "vistas-previas:force": "node scripts/generar-vistas-previas.js --force"
   },
   "devDependencies": {
     "sharp": "^0.33.5"

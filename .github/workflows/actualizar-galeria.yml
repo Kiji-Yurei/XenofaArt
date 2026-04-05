@@ -32,7 +32,7 @@ jobs:
         run: node scripts/generar-galeria.js
 
       - name: Generar vistas previas (WebP ligeras)
-        run: node scripts/generar-vistas-previas.js
+        run: node scripts/generar-vistas-previas.js --force
 
       - name: Commit y push si hay cambios
         run: |

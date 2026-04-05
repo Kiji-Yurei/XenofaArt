@@ -12,11 +12,32 @@ function galleryPreviewSrc(src) {
     return src.slice(0, slash) + '/_preview/' + base + '.webp';
 }
 
+function whenArteGalleryImagesReady(container) {
+    if (!container || !container.classList.contains('gallery-art')) return;
+    container.classList.add('gallery-art-pending-reveal');
+    var imgs = container.querySelectorAll('img');
+    if (!imgs.length) return;
+    var promises = Array.prototype.map.call(imgs, function(img) {
+        if (img.complete) return Promise.resolve();
+        return new Promise(function(resolve) {
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+        });
+    });
+    Promise.all(promises).then(function() {
+        requestAnimationFrame(function() {
+            container.classList.remove('gallery-art-pending-reveal');
+            container.classList.add('gallery-art-reveal-ready');
+        });
+    });
+}
+
 function renderGallery(container, images, basePath) {
     if (!container || !Array.isArray(images)) return;
     container.innerHTML = '';
     var galeria = container.getAttribute('data-galeria') || 'arte';
     var origin = window.location.origin + basePath;
+    var isArte = galeria === 'arte';
     images.forEach(function(item, i) {
         var src = typeof item === 'string' ? item : (item.src || item);
         var desc = typeof item === 'object' && item.desc ? item.desc : '';
@@ -30,7 +51,7 @@ function renderGallery(container, images, basePath) {
         var img = document.createElement('img');
         img.src = previewSrc;
         img.alt = div.getAttribute('data-alt');
-        img.loading = 'lazy';
+        img.loading = isArte ? 'eager' : 'lazy';
         img.decoding = 'async';
         img.onerror = function() {
             img.onerror = null;
@@ -39,6 +60,7 @@ function renderGallery(container, images, basePath) {
         div.appendChild(img);
         container.appendChild(div);
     });
+    if (isArte) whenArteGalleryImagesReady(container);
 }
 
 function addSparklesToGallery() {
