@@ -68,6 +68,9 @@ function addSparklesToGallery() {
     });
 }
 
+var popupPelucasControlsBound = false;
+var popupPelucasSliderState = { idx: 0, total: 0 };
+
 function initPopupPelucas(pelucasItems, basePath) {
     var track = document.querySelector('.popup-pelucas-slider-track');
     if (!track || !pelucasItems || pelucasItems.length === 0) return;
@@ -81,63 +84,100 @@ function initPopupPelucas(pelucasItems, basePath) {
         div.style.backgroundImage = "url('" + previewSrc + "')";
         track.appendChild(div);
     });
-    var popupIdx = 0;
-    var total = pelucasItems.length;
+    popupPelucasSliderState.total = pelucasItems.length;
+    popupPelucasSliderState.idx = 0;
     function updatePopupSlider() {
-        track.style.transform = 'translateX(-' + (popupIdx * 100) + '%)';
+        track.style.transform = 'translateX(-' + (popupPelucasSliderState.idx * 100) + '%)';
     }
-    document.querySelector('.popup-pelucas-prev')?.addEventListener('click', function() {
-        popupIdx = (popupIdx - 1 + total) % total;
-        updatePopupSlider();
-    });
-    document.querySelector('.popup-pelucas-next')?.addEventListener('click', function() {
-        popupIdx = (popupIdx + 1) % total;
-        updatePopupSlider();
-    });
-    setInterval(function() {
-        if (document.getElementById('popup-pelucas')?.classList.contains('is-open')) {
-            popupIdx = (popupIdx + 1) % total;
+    updatePopupSlider();
+
+    if (!popupPelucasControlsBound) {
+        popupPelucasControlsBound = true;
+        document.querySelector('.popup-pelucas-prev')?.addEventListener('click', function() {
+            var t = popupPelucasSliderState.total;
+            if (!t) return;
+            popupPelucasSliderState.idx = (popupPelucasSliderState.idx - 1 + t) % t;
             updatePopupSlider();
-        }
-    }, 4000);
+        });
+        document.querySelector('.popup-pelucas-next')?.addEventListener('click', function() {
+            var t = popupPelucasSliderState.total;
+            if (!t) return;
+            popupPelucasSliderState.idx = (popupPelucasSliderState.idx + 1) % t;
+            updatePopupSlider();
+        });
+        setInterval(function() {
+            if (document.getElementById('popup-pelucas')?.classList.contains('is-open')) {
+                var t = popupPelucasSliderState.total;
+                if (t) popupPelucasSliderState.idx = (popupPelucasSliderState.idx + 1) % t;
+                updatePopupSlider();
+            }
+        }, 4000);
+    }
 }
 
-(function loadGalleries() {
-    // Ruta base: en GitHub Pages es /XenofaArt/, en local puede ser /
-    var pathname = window.location.pathname;
-    var basePath = pathname;
-    if (pathname.match(/\.[^/]+$/)) {
-        basePath = pathname.replace(/\/[^/]+$/, '/');
-    } else if (!pathname.endsWith('/')) {
-        basePath = pathname + '/';
-    }
-    if (!basePath) basePath = '/';
-    var jsonUrl = new URL(basePath + 'galeria.json', window.location.origin).href;
+// Ruta base: GitHub Pages /XenofaArt/, local /
+var pathnameForBase = window.location.pathname;
+var basePathGlobal = pathnameForBase;
+if (pathnameForBase.match(/\.[^/]+$/)) {
+    basePathGlobal = pathnameForBase.replace(/\/[^/]+$/, '/');
+} else if (!pathnameForBase.endsWith('/')) {
+    basePathGlobal = pathnameForBase + '/';
+}
+if (!basePathGlobal) basePathGlobal = '/';
 
-    fetch(jsonUrl, { cache: 'no-store' })
+var galeriaJsonPromise = null;
+var galeriaDataCache = null;
+var galleriesRendered = { arte: false, cosplay: false, pelucas: false };
+
+function fetchGaleriaData() {
+    if (galeriaDataCache) return Promise.resolve(galeriaDataCache);
+    if (galeriaJsonPromise) return galeriaJsonPromise;
+    var jsonUrl = new URL(basePathGlobal + 'galeria.json', window.location.origin).href;
+    galeriaJsonPromise = fetch(jsonUrl)
         .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('Fetch failed: ' + r.status)); })
         .then(function(data) {
-            var artGallery = document.querySelector('[data-galeria="arte"]');
-            var cosplayGallery = document.querySelector('[data-galeria="cosplay"]');
-            var pelucasGallery = document.querySelector('[data-galeria="pelucas"]');
-            if (artGallery && data.arte && Array.isArray(data.arte)) {
-                renderGallery(artGallery, data.arte, basePath);
+            galeriaDataCache = data;
+            return data;
+        });
+    return galeriaJsonPromise;
+}
+
+function showGalleryErrorForKey(key, err) {
+    var container = document.querySelector('[data-galeria="' + key + '"]');
+    if (!container) return;
+    var msg = err && err.message ? err.message : 'error';
+    container.innerHTML = '<p class="gallery-error">No se pudo cargar la galería (' + msg + ').</p>';
+}
+
+/** Solo descarga imágenes de la sección al entrar en Arte / Cosplay / Pelucas */
+function loadGalleryPage(pageId) {
+    var map = { art: 'arte', cosplay: 'cosplay', pelucas: 'pelucas' };
+    var key = map[pageId];
+    if (!key || galleriesRendered[key]) return Promise.resolve();
+    var container = document.querySelector('[data-galeria="' + key + '"]');
+    if (!container) return Promise.resolve();
+
+    container.innerHTML = '<p class="gallery-loading">Cargando…</p>';
+    return fetchGaleriaData()
+        .then(function(data) {
+            var items = data[key];
+            if (!Array.isArray(items)) {
+                container.innerHTML = '';
+                return;
             }
-            if (cosplayGallery && data.cosplay && Array.isArray(data.cosplay)) {
-                renderGallery(cosplayGallery, data.cosplay, basePath);
-            }
-            if (pelucasGallery && data.pelucas && Array.isArray(data.pelucas)) {
-                renderGallery(pelucasGallery, data.pelucas, basePath);
-            }
+            renderGallery(container, items, basePathGlobal);
+            galleriesRendered[key] = true;
             addSparklesToGallery();
-            if (data.pelucas && Array.isArray(data.pelucas)) initPopupPelucas(data.pelucas, basePath);
+            if ((pageId === 'cosplay' || pageId === 'pelucas') && data.pelucas && data.pelucas.length) {
+                initPopupPelucas(data.pelucas, basePathGlobal);
+            }
         })
         .catch(function(err) {
-            document.querySelectorAll('[data-galeria]').forEach(function(el) {
-                el.innerHTML = '<p class="gallery-error">No se pudo cargar la galería (' + (err && err.message ? err.message : 'error') + ').</p>';
-            });
+            showGalleryErrorForKey(key, err);
         });
-})();
+}
+
+window.loadGalleryPage = loadGalleryPage;
 
 // Texto animado - letras que aparecen en "XenofaArt"
 const heroTitleText = document.querySelector('.hero-title-text');
@@ -241,6 +281,7 @@ function showPage(pageId) {
             const w = document.getElementById('popup-pelucas-wrapper');
             if (w) { w.classList.remove('is-visible'); w.setAttribute('aria-hidden', 'true'); }
         }
+        loadGalleryPage(pageId);
     };
 
     if (currentActive && currentActive !== pageId) {

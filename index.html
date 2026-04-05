@@ -347,6 +347,7 @@ function goToPage(id) {
                 if (w) { w.classList.remove('is-visible'); w.setAttribute('aria-hidden','true'); }
             }
         }
+        if (typeof loadGalleryPage === 'function') loadGalleryPage(id);
         updateNav();
     };
     if (currentActive && target && currentActive.id !== 'page-' + id) {
