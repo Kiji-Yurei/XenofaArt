@@ -100,11 +100,21 @@ function initPopupPelucas(pelucasItems, basePath) {
     var popupOrigin = window.location.origin + (basePath || '/');
     pelucasItems.forEach(function(item) {
         var src = (typeof item === 'string' ? item : (item.src || item));
+        var fullSrc = new URL(src, popupOrigin).href;
         var previewSrc = new URL(galleryPreviewSrc(src), popupOrigin).href;
-        var div = document.createElement('div');
-        div.className = 'popup-pelucas-slider-slide';
-        div.style.backgroundImage = "url('" + previewSrc + "')";
-        track.appendChild(div);
+        var slide = document.createElement('div');
+        slide.className = 'popup-pelucas-slider-slide';
+        var img = document.createElement('img');
+        img.src = previewSrc;
+        img.alt = '';
+        img.loading = 'eager';
+        img.decoding = 'async';
+        img.onerror = function() {
+            img.onerror = null;
+            img.src = fullSrc;
+        };
+        slide.appendChild(img);
+        track.appendChild(slide);
     });
     popupPelucasSliderState.total = pelucasItems.length;
     popupPelucasSliderState.idx = 0;
