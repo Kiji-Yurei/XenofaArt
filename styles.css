@@ -15,6 +15,8 @@
     --shadow: 0 4px 20px rgba(159, 122, 234, 0.15);
     --radius: 16px;
     --radius-sm: 8px;
+    /* Cursor estrella (SVG data URL) — centro 12,12 */
+    --cursor-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%239f7aea' d='M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z'/%3E%3C/svg%3E") 12 12, auto;
 }
 
 /* ===== Reset & Base ===== */
@@ -45,15 +47,38 @@ body {
     position: relative;
 }
 
+/* Estrella en toda la página: heredan del body y anulan cursor:pointer sueltos */
+*,
+*::before,
+*::after {
+    cursor: inherit !important;
+}
+
+/* Raíz: sin esto, body heredaría de html y *::important anularía el cursor del body */
+html,
+body {
+    cursor: var(--cursor-star) !important;
+}
+
+.lightbox-prev:disabled,
+.lightbox-next:disabled,
+button:disabled {
+    cursor: not-allowed !important;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="password"],
+textarea {
+    cursor: text !important;
+}
+
 @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
-}
-
-/* Cursor personalizado - estrella en galerías */
-.gallery-art,
-.gallery-cosplay {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%239f7aea' d='M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z'/%3E%3C/svg%3E") 12 12, pointer;
 }
 
 /* Patrón de puntos sutil - detrás del contenido */

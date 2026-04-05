@@ -2,23 +2,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Cargar galerías desde galeria.json
 // Estructura: { "arte": [{"src":"Arte/x.jpg","desc":""}, ...] } o formato legacy {"arte":["Arte/x.jpg"], ...}
+// Miniaturas: Arte/_preview/nombre.webp (generadas con npm run vistas-previas)
+function galleryPreviewSrc(src) {
+    var slash = src.lastIndexOf('/');
+    if (slash < 0) return src;
+    var file = src.slice(slash + 1);
+    var dot = file.lastIndexOf('.');
+    var base = dot > 0 ? file.slice(0, dot) : file;
+    return src.slice(0, slash) + '/_preview/' + base + '.webp';
+}
+
 function renderGallery(container, images, basePath) {
     if (!container || !Array.isArray(images)) return;
     container.innerHTML = '';
     var galeria = container.getAttribute('data-galeria') || 'arte';
+    var origin = window.location.origin + basePath;
     images.forEach(function(item, i) {
         var src = typeof item === 'string' ? item : (item.src || item);
         var desc = typeof item === 'object' && item.desc ? item.desc : '';
         var div = document.createElement('div');
         div.className = 'gallery-item gallery-item-img';
-        var fullSrc = new URL(src, window.location.origin + basePath).href;
+        var fullSrc = new URL(src, origin).href;
+        var previewSrc = new URL(galleryPreviewSrc(src), origin).href;
         div.setAttribute('data-src', fullSrc);
         div.setAttribute('data-desc', desc);
         div.setAttribute('data-alt', (galeria === 'arte' ? 'Arte ' : galeria === 'pelucas' ? 'Peluca ' : 'Cosplay ') + (i + 1));
         var img = document.createElement('img');
-        img.src = fullSrc;
+        img.src = previewSrc;
         img.alt = div.getAttribute('data-alt');
         img.loading = 'lazy';
+        img.decoding = 'async';
+        img.onerror = function() {
+            img.onerror = null;
+            img.src = fullSrc;
+        };
         div.appendChild(img);
         container.appendChild(div);
     });
@@ -55,12 +72,13 @@ function initPopupPelucas(pelucasItems, basePath) {
     var track = document.querySelector('.popup-pelucas-slider-track');
     if (!track || !pelucasItems || pelucasItems.length === 0) return;
     track.innerHTML = '';
+    var popupOrigin = window.location.origin + (basePath || '/');
     pelucasItems.forEach(function(item) {
         var src = (typeof item === 'string' ? item : (item.src || item));
-        var fullSrc = new URL(src, window.location.origin + (basePath || '/')).href;
+        var previewSrc = new URL(galleryPreviewSrc(src), popupOrigin).href;
         var div = document.createElement('div');
         div.className = 'popup-pelucas-slider-slide';
-        div.style.backgroundImage = "url('" + fullSrc + "')";
+        div.style.backgroundImage = "url('" + previewSrc + "')";
         track.appendChild(div);
     });
     var popupIdx = 0;

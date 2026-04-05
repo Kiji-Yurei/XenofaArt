@@ -23,18 +23,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
 
       - name: Generar galeria.json
         run: node scripts/generar-galeria.js
+
+      - name: Generar vistas previas (WebP ligeras)
+        run: node scripts/generar-vistas-previas.js
 
       - name: Commit y push si hay cambios
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet galeria.json; then
-            echo "No hay cambios en galeria.json"
+          git add galeria.json Arte/_preview Cosplay/_preview Pelucas/_preview
+          if git diff --cached --quiet; then
+            echo "Sin cambios en galería ni vistas previas"
           else
-            git add galeria.json
-            git commit -m "chore: actualizar galería automáticamente [skip ci]"
+            git commit -m "chore: actualizar galería y vistas previas [skip ci]"
             git push
           fi

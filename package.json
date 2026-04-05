@@ -1,0 +1,12 @@
+{
+  "name": "xenofaart-site",
+  "private": true,
+  "description": "Scripts locales y CI para galería y vistas previas",
+  "scripts": {
+    "galeria": "node scripts/generar-galeria.js",
+    "vistas-previas": "node scripts/generar-vistas-previas.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}
